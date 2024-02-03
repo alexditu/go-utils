@@ -19,14 +19,15 @@ build () {
 		LD_FLAGS="\
 		-X github.com/alexditu/go-utils/pkg/version.commitHash=$(git rev-parse --short HEAD) \
 		-X github.com/alexditu/go-utils/pkg/version.branchName=$(git rev-parse --abbrev-ref HEAD) \
-		-X github.com/alexditu/go-utils/pkg/version.binaryName=${BINARIES[$k]}"
+		-X github.com/alexditu/go-utils/pkg/version.binaryName=${BINARIES[$k]} \
+		-X github.com/alexditu/go-utils/pkg/version.major=1 \
+		-X github.com/alexditu/go-utils/pkg/version.minor=0"
 
-		echo "Building ${k} to ${BIN_DIR}"
+		local OUT_BIN="${BIN_DIR}/${BINARIES[$k]}"
+		echo "Building ${k} to ${OUT_BIN}"
 
 		GOARCH=amd64 GOOS=linux \
-		go build -o "${BIN_DIR}/${BINARIES[$k]}" \
-				-ldflags "${LD_FLAGS}" \
-				"./${k}"
+			go build -o ${OUT_BIN} -ldflags "${LD_FLAGS}" "./${k}"
 	done
 }
 
